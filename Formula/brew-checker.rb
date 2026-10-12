@@ -1,14 +1,14 @@
 class BrewChecker < Formula
   desc "Reconcile installed Homebrew casks against your Applications folder"
   homepage "https://github.com/rtriunfo/brew-checker"
-  url "https://github.com/rtriunfo/brew-checker/releases/download/v0.1.1/brew-checker.py", using: :nounzip
-  sha256 "a0c443a0352768fff0e8493c3a0abee63ff94f457a7095c71d6d88d319e80436"
+  url "https://github.com/rtriunfo/brew-checker/releases/download/v0.2.0/brew-checker.py", using: :nounzip
+  sha256 "f6b808ae1a21c333cadc8bc94e48e28fdd4e69f0c54d91b85469fd1ea1c754e0"
   license "MIT"
-  version "0.1.1"
+  version "0.2.0"
 
   resource "brew-checker-tui" do
-    url "https://github.com/rtriunfo/brew-checker/releases/download/v0.1.1/brew-checker-tui", using: :nounzip
-    sha256 "4b375cc9c388dbb3625483befb8a8a97f65d53b3752b2e07c4fe5d43d1eeebf1"
+    url "https://github.com/rtriunfo/brew-checker/releases/download/v0.2.0/brew-checker-tui", using: :nounzip
+    sha256 "8de8ac24656f9c047e20ff5120baa8e6a3cb6ee6b7ceff920f62db10c0d4f8ae"
   end
 
   def install
