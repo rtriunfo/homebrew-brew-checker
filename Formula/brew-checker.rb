@@ -1,23 +1,32 @@
 class BrewChecker < Formula
   desc "Reconcile installed Homebrew casks against your Applications folder"
   homepage "https://github.com/rtriunfo/brew-checker"
-  url "https://github.com/rtriunfo/brew-checker/releases/download/v0.2.0/brew-checker.py", using: :nounzip
-  sha256 "f6b808ae1a21c333cadc8bc94e48e28fdd4e69f0c54d91b85469fd1ea1c754e0"
+  url "https://github.com/rtriunfo/brew-checker/releases/download/v0.2.1/brew-checker.py", using: :nounzip
+  sha256 "0e5b41b82d6c66283a805caba05400a5d61828a9f82b63442af8c7aab2ef1a9a"
   license "MIT"
-  version "0.2.0"
+  version "0.2.1"
+
+  # Run on a pinned interpreter rather than whatever `python3` is first on PATH
+  # (on stock macOS that's the Command Line Tools' 3.9). The release workflow
+  # smoke-tests the binaries on this same version, read from this line.
+  depends_on "python@3.15"
 
   resource "brew-checker-tui" do
-    url "https://github.com/rtriunfo/brew-checker/releases/download/v0.2.0/brew-checker-tui", using: :nounzip
-    sha256 "8de8ac24656f9c047e20ff5120baa8e6a3cb6ee6b7ceff920f62db10c0d4f8ae"
+    url "https://github.com/rtriunfo/brew-checker/releases/download/v0.2.1/brew-checker-tui", using: :nounzip
+    sha256 "6c9bd224878aa84234670e72703b8dc331680b0af827770d9f452ce57204657f"
   end
 
   def install
-    bin.install "brew-checker.py" => "brew-checker"
-    chmod 0755, bin/"brew-checker"
+    libexec.install "brew-checker.py"
+    resource("brew-checker-tui").stage { libexec.install "brew-checker-tui" }
 
-    resource("brew-checker-tui").stage do
-      bin.install "brew-checker-tui"
-      chmod 0755, bin/"brew-checker-tui"
+    python = Formula["python@3.15"].opt_bin/"python3.15"
+    { "brew-checker" => "brew-checker.py", "brew-checker-tui" => "brew-checker-tui" }.each do |cmd, target|
+      (bin/cmd).write <<~SH
+        #!/bin/bash
+        exec "#{python}" "#{libexec}/#{target}" "$@"
+      SH
+      chmod 0755, bin/cmd
     end
   end
 
